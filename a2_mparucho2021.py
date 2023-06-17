@@ -10,18 +10,19 @@ import math
 def initialize_population(population_size, cities):
     population = []
 
-    for _ in range(population_size):
+    for i in range(population_size):
         individual = random.sample(cities, len(cities))
         population.append(individual)
     
     return population
 
+
 #This function finds the total distance of the trip, it uses the distance_between function which is in charge of find the distance from city to city
 def trip_distance(trip):
     distance = 0
     for i in range(len(trip)):
-        city_current = trip[i]
-        city_next = trip[(i+1) % len(trip)]
+        city_current = trip[i][1]
+        city_next = trip[(i+1) % len(trip)][1]
         distance += distance_between(city_current, city_next)
     
     return distance
@@ -84,8 +85,11 @@ def mutate(offspring):
         if random.random() < rate:
             individual_list = list(individual)
             random_index = random.randint(0, len(individual_list) - 1)
-            individual_list[random_index] = tuple(1 - coord for coord in individual_list[random_index])
+            coord = individual_list[random_index][1]  # Getting the coordinates
+            mutated_coord = tuple(1 - c for c in coord)  # Mutating the coordinates
+            individual_list[random_index] = (individual_list[random_index][0], mutated_coord)  # Combining the mutated coordinates with the original city name
             individual = tuple(individual_list)
+
 
 #populating with new offspring
 def replace_population(population, offspring):
@@ -94,13 +98,29 @@ def replace_population(population, offspring):
 
 #this function will display the routes and total distance of each run
 def run_trip():
-    cities = [( 25.7617,-80.1918), (34.0522,-118.2437), (40.7608,-111.8910), (40.6782,-73.9442), (32.7765,-79.9311)] #Miami, Los Angeles, Salt Lake City, Brooklyn, Charleston
+    cities = [] 
     population_size = 100
     generations = 50
 
+    #Allowing the user to enter city info to avoid mistakes when entering data into code
+    numb_cities = int(input("Enter the number of cities: "))
+    for i in range(numb_cities):
+        name = input(f"Enter the name of the city {i+1}: ")
+        latitude = float(input(f"Enter the latitude of city {name}: "))
+        longitude = float(input(f"Enter the longitude of city {name}: "))
+        city = (latitude, longitude)
+        #adding into the list
+        cities.append((name, city))
+   
+    
     for i in range(5):
         best_route = tsp_genetic_algorithm(cities, population_size, generations)
         total_distance = trip_distance(best_route)
-        print("Test #", i+1, ": Best Route:", best_route, "Total Distance:", total_distance)
+        
+        city_names = [city[0] for city in best_route]
+        city_coordinates = [city[1] for city in best_route]
+        
+        print("Test #", i+1, ": Best Route:", city_names, "Total Distance:", total_distance)
+
 
 run_trip()
