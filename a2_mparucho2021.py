@@ -6,6 +6,7 @@
 import random
 import math
 
+#this function provides individual so we can start testing the best solutions possible.
 def initialize_population(population_size, cities):
     population = []
 
@@ -76,7 +77,7 @@ def crossover(parent1, parent2):
     child2 = parent2[:point] + parent1[point:]
     return child1, child2
 
-#this function is responsible for mutating each offspring with a rate of 0.1 this checks to see if there are any better solutions
+#this function is responsible for mutating each offspring with a rate of my chosing this checks to see if there are any better solutions
 def mutate(offspring):
     rate = 0.02
     for individual in offspring:
@@ -86,20 +87,20 @@ def mutate(offspring):
             individual_list[random_index] = tuple(1 - coord for coord in individual_list[random_index])
             individual = tuple(individual_list)
 
+#populating with new offspring
 def replace_population(population, offspring):
     population[:len(offspring)] = offspring
     return population
 
+#this function will display the routes and total distance of each run
+def run_trip():
+    cities = [( 25.7617,-80.1918), (34.0522,-118.2437), (40.7608,-111.8910), (40.6782,-73.9442), (32.7765,-79.9311)] #Miami, Los Angeles, Salt Lake City, Brooklyn, Charleston
+    population_size = 100
+    generations = 50
 
+    for i in range(5):
+        best_route = tsp_genetic_algorithm(cities, population_size, generations)
+        total_distance = trip_distance(best_route)
+        print("Test #", i+1, ": Best Route:", best_route, "Total Distance:", total_distance)
 
-#Setting coordinates of cities
-#For this test I will do the cities of New York, Los Angeles, London
-cities =[(40.7128, -74.0060),(34.0522, -118.2437),(51.5074, -0.1278)]
-#Setting population size and amount of generations
-population_size = 100
-number_generation = 50
-#calling tsp algorithm
-best_solution = tsp_genetic_algorithm(cities, population_size, number_generation)
-#printing results
-for x in range(10):
-    print("Test #", x+1, ": ", best_solution)
+run_trip()
