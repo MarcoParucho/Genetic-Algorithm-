@@ -1,6 +1,13 @@
+"""
+    Author:Marco Parucho
+    Date: 06/14/2023
+    Description: Create a solution of the salesmen problem using genetic algorithms
+"""
 import random
 import math
+import os
 
+#this function provides individual so we can start testing the best solutions possible.
 def initialize_population(population_size, cities):
     population = []
 
@@ -10,6 +17,7 @@ def initialize_population(population_size, cities):
 
     return population
 
+#This function finds the total distance of the trip, it uses the distance_between function which is in charge of find the distance from city to city
 def trip_distance(trip):
     distance = 0
     for i in range(len(trip)):
@@ -25,6 +33,7 @@ def distance_between(city1, city2):
     distance = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
     return distance
 
+#this function makes sure that cities are only visited once.
 def repair_solution(solution):
     visited_cities = set()
     repaired_solution = []
@@ -56,6 +65,9 @@ def select_parents(parents):
 
     return offspring
 
+#this function is responsible for performing the cross over.
+#it works similar to how a human is made in the sense that half of the DNA is taken from the father/mother and united together to make one child. 
+#This is perfomed by slicing the point of paren1 and parent2  and uniting them with the "+" symbol.
 def crossover(parent1, parent2):
     point = random.randint(1, len(parent1) - 1)
     child1 = parent1[:point]
@@ -71,6 +83,7 @@ def crossover(parent1, parent2):
 
     return child1, child2
 
+#this function is responsible for mutating each offspring with a rate of my chosing this checks to see if there are any better solutions
 def mutate(offspring):
     rate = 0.03
     for individual in offspring:
@@ -99,15 +112,24 @@ def tsp_genetic_algorithm(cities, population_size, num_generations):
     best = min(population, key=trip_distance)
 
     return best
-
+#this function will display the routes and total distance of each run
 def run_trip():
-    cities = [
-        ("New York City", (40.7128, -74.0060)),
-        ("Miami", (25.7617, -80.1918)),
-        ("Phoenix", (33.4484, -112.0740))
-    ]
+    cities = []
     population_size = 100
     num_generations = 50
+
+    print("     WELCOME - TSP solver")
+    print("------------------------------\n")
+    #Allowing the user to enter city info to avoid mistakes when entering data into code
+    numb_cities = int(input("Enter the number of cities: "))
+    for i in range(numb_cities):
+        name = input(f"Enter the name of city {i+1}: ")
+        latitude = float(input(f"Enter the latitude of city {name}: "))
+        longitude = float(input(f"Enter the longitude of city {name}: "))
+        city = (name, (latitude, longitude))
+        cities.append(city)
+
+        os.system("cls")
 
     for i in range(5):
         best_route = tsp_genetic_algorithm(cities, population_size, num_generations)
@@ -118,5 +140,8 @@ def run_trip():
         city_coordinates = [city[1] for city in best_route]
 
         print("Test #", i+1, ": Best Route:", city_names)
+       
+    input("\nEnter any key to close the program... ")
+
 
 run_trip()
