@@ -131,15 +131,15 @@ def run_trip():
 
         os.system("cls")
 
-    for i in range(5):
-        best_route = tsp_genetic_algorithm(cities, population_size, num_generations)
-        best_route.append(best_route[0])  # Append the first city to complete the loop
-        total_distance = trip_distance(best_route)
+    
+    best_route = tsp_genetic_algorithm(cities, population_size, num_generations)
+    best_route.append(best_route[0])  # Append the first city to complete the loop
+    total_distance = trip_distance(best_route)
 
-        city_names = [city[0] for city in best_route]
-        city_coordinates = [city[1] for city in best_route]
+    city_names = [city[0] for city in best_route]
+    city_coordinates = [city[1] for city in best_route]
 
-        print("Test #", i+1, ": Best Route:", city_names)
+    print("Best Route:", city_names)
        
     input("\nEnter any key to close the program... ")
 
