@@ -13,7 +13,7 @@ def initialize_population(population_size, cities):
 
     for _ in range(population_size):
         individual = cities.copy()
-        random.shuffle(individual) #will avoid cities from appearing again
+        random.shuffle(individual) 
         population.append(individual)
     
     return population
