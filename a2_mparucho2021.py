@@ -11,7 +11,7 @@ import os
 def initialize_population(population_size, cities):
     population = []
 
-    for _ in range(population_size):
+    for i in range(population_size):
         individual = random.sample(cities, len(cities))
         population.append(individual)
 
@@ -102,7 +102,7 @@ def replace_population(population, offspring):
 def tsp_genetic_algorithm(cities, population_size, num_generations):
     population = initialize_population(population_size, cities)
 
-    for _ in range(num_generations):
+    for i in range(num_generations):
         fitness_scores = [1 / trip_distance(individual) for individual in population]
         parents = selection(population, fitness_scores)
         offspring = select_parents(parents)
