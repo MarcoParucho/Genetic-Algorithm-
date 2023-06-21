@@ -7,6 +7,48 @@ import random
 import math
 import os
 
+#quality of life improvements.... Additions made after first submission. 
+#creating a function that makes sure the user only enters an integer when asked for the number of cities. 
+def get_number_cities():
+    while True:
+        try:
+            number_of_cities = int(input("Enter the number of cities: "))
+            return number_of_cities
+        except ValueError:
+            print("Error. Please enter an integer.")
+
+#this function will make sure the user only enter characters and not any digits when asked for a city name
+def get_city_name(city_number):
+    while True:
+        city_name = input(f"Enter the name of the city:").strip() #removes all the spaces. For example "New York City" will now work
+        if city_name.replace(" ", "").isalpha():
+            return city_name 
+        print("Error. Please enter a valid city name.")
+
+#This function makes sure the user enter correct and logical data for latitude within the -90|90 degrees range
+def get_latitude(city_name):
+    while True:
+        latitude = input(f"Enter the latitude of {city_name}: ")
+        
+        try: 
+            latitude = float(latitude)
+            if -90 <= latitude <= 90:
+                return latitude
+            print("Error. Please insert a latitue withing the correct range.")
+        except ValueError:
+            print("Error. Please enter a valid float number.")
+
+#This functio has the same task as the get_latitude but for longitude. 180 degree range
+def get_longitude(city_name):
+    while True: 
+        longitude = input(f"Enter the longitude of {city_name}:")
+        try:
+            longitude = float(longitude)
+            if -180 <= longitude <= 180:
+                return longitude
+            print("Error. Please enter a longitude within the correct range.")
+        except:
+            print("Error. Please enter a valid float number.")
 #this function provides individual so we can start testing the best solutions possible.
 def initialize_population(population_size, cities):
     population = []
@@ -120,12 +162,14 @@ def run_trip():
 
     print("     WELCOME - TSP solver")
     print("------------------------------\n")
+
     #Allowing the user to enter city info to avoid mistakes when entering data into code
-    numb_cities = int(input("Enter the number of cities: "))
+    numb_cities = get_number_cities() #quality of life improvement.
+
     for i in range(numb_cities):
-        name = input(f"Enter the name of city {i+1}: ")
-        latitude = float(input(f"Enter the latitude of city {name}: "))
-        longitude = float(input(f"Enter the longitude of city {name}: "))
+        name = get_city_name(i+1)
+        latitude = get_latitude(name) #improvement 
+        longitude = get_longitude(name) #improvement
         city = (name, (latitude, longitude))
         cities.append(city)
 
@@ -140,8 +184,16 @@ def run_trip():
     city_coordinates = [city[1] for city in best_route]
 
     print("Best Route:", city_names)
-       
-    input("\nEnter any key to close the program... ")
+    
+#creating this function so the users have the option to run the program again without having to open the .py file again
+def main():
+    while True:
+        run_trip()
+
+        choice = input("\nRun program again? (Y/N): ")
+        os.system("cls")
+        if choice != "Y":
+            break
 
 
-run_trip()
+main()
